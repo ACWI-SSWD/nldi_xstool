@@ -1,9 +1,11 @@
 import pytest
 
 from pynhd import NLDI
-from shapely.geometry import Point
+# from shapely.geometry import Point
 from numpy.testing import assert_allclose
 from numpy import array
+
+
 @pytest.mark.parametrize(
     'gage, loc, comid',
     [
@@ -13,12 +15,11 @@ from numpy import array
     ]
 )
 def test_nldi(gage, loc, comid):
-    locarray =array(loc)
+    locarray = array(loc)
     gageloc = NLDI().getfeature_byid("nwissite", gage).to_crs('epsg:3857')
     cid = gageloc.comid.values.astype(str)
     strmseg_loc = NLDI().getfeature_byid("comid", cid[0]).to_crs('epsg:3857')
     print(strmseg_loc.comid[0])
     assert(strmseg_loc.comid[0] == comid)
     gageloc_array = array([(gageloc.geometry[0].x, gageloc.geometry[0].y)])
-    assert_allclose(gageloc_array, locarray, rtol=0.1 )
-    tmp = 0
+    assert_allclose(gageloc_array, locarray, rtol=0.1)

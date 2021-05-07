@@ -2,7 +2,6 @@
 
 """Tests for `nldi_xstool` package."""
 
-import pytest
 
 from click.testing import CliRunner
 

@@ -12,7 +12,7 @@ class XSGen:
     """
 
     def __init__(self, point, cl_geom, ny, width) -> None:
-        
+
         self.cl_geom = cl_geom
         self.point = point
         self.tension = 0.5
