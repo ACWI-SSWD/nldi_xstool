@@ -6,8 +6,8 @@ NLDI XSTool
 .. image:: https://img.shields.io/pypi/v/nldi_xstool.svg
         :target: https://pypi.python.org/pypi/nldi_xstool
 
-.. image:: https://img.shields.io/travis/rmcd-mscb/nldi_xstool.svg
-        :target: https://travis-ci.com/rmcd-mscb/nldi_xstool
+.. image::https://travis-ci.com/ACWI-SSWD/nldi_xstool.svg?branch=main
+        :target: https://travis-ci.com/ACWI-SSWD/nldi_xstool
 
 .. image:: https://readthedocs.org/projects/nldi-xstool/badge/?version=latest
         :target: https://nldi-xstool.readthedocs.io/en/latest/?version=latest

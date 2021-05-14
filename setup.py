@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """The setup script."""
-
+from os import path
 from setuptools import setup, find_packages
 
 with open('README.rst') as readme_file:
@@ -10,23 +10,29 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0',
-                'pygeohydro==0.10.2',
-                'py3dep==0.10.1',
-                'pygeoogc==0.10.1',
-                'pygeoutils==0.10.1',
-                'pynhd==0.10.1',
-                'shapely',
-                'dataretrieval',
-                'folium',
-                'lxml',
-                'xarray',
-                'scipy',
-                'dask',
-                'netcdf4',
-                'bottleneck',
-                'geopandas',
-                'numba']
+here = path.abspath(path.dirname(__file__))
+with open(path.join(here, 'requirements.txt')) as requirements_file:
+    # Parse requirements.txt, ignoring any commented-out lines.
+    requirements = [line for line in requirements_file.read().splitlines()
+                    if not line.startswith('#')]
+
+# requirements = ['Click>=7.0',
+#                 'pygeohydro==0.10.2',
+#                 'git+https://github.com/cheginit/py3dep.git',
+#                 'git+https://github.com/cheginit/pygeoogc.git',
+#                 'git+https://github.com/cheginit/pygeoutils.git',
+#                 'pynhd==0.10.1',
+#                 'shapely',
+#                 'dataretrieval',
+#                 'folium',
+#                 'lxml',
+#                 'xarray',
+#                 'scipy',
+#                 'dask',
+#                 'netcdf4',
+#                 'bottleneck',
+#                 'geopandas',
+#                 'numba']
 
 setup_requirements = ['pytest-runner', ]
 
