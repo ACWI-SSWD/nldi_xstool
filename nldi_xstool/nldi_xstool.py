@@ -119,7 +119,7 @@ def getXSAtPoint(point, numpoints, width, file=None, res=10):
     try:
         comid = getCIDFromLatLon(point)
     except Exception as ex:
-        print(f'Error: {ex} unable to find comid - check lon lat coords')
+        # print(f'Error: {ex} unable to find comid - check lon lat coords')
         sys.exit(f'Error: {ex} unable to find comid - check lon lat coords')
     # print(f'comid = {comid}')
     strm_seg = NLDI().getfeature_byid("comid", comid).to_crs('epsg:3857')
