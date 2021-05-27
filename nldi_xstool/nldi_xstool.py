@@ -12,6 +12,8 @@ from shapely.geometry import Point, LineString
 import geopandas as gpd
 import pandas as pd
 import numpy as np
+import sys
+
 # import os.path as path
 
 
@@ -30,7 +32,7 @@ def dataframe_to_geodataframe(df, crs):
     return gdf
 
 
-def getXSAtEndPts(path, numpts, crs, file=None, res=10):
+def getXSAtEndPts(path, numpts, crs='epsg:4326', file=None, res=10):
     """[summary]
 
     Args:
@@ -114,7 +116,11 @@ def getXSAtPoint(point, numpoints, width, file=None, res=10):
     gpd_pt = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.Lon, df.Lat))
     gpd_pt.set_crs(epsg=4326, inplace=True)
     gpd_pt.to_crs(epsg=3857, inplace=True)
-    comid = getCIDFromLatLon(point)
+    try:
+        comid = getCIDFromLatLon(point)
+    except Exception as ex:
+        print(f'Error: {ex} unable to find comid - check lon lat coords')
+        sys.exit(f'Error: {ex} unable to find comid - check lon lat coords')
     # print(f'comid = {comid}')
     strm_seg = NLDI().getfeature_byid("comid", comid).to_crs('epsg:3857')
     xs = XSGen(point=gpd_pt, cl_geom=strm_seg, ny=numpoints, width=width)
@@ -165,7 +171,20 @@ def getCIDFromLatLon(point):
     baseURL = 'https://labs.waterdata.usgs.gov/api/nldi/linked-data/comid/position?f=json&coords='
     url = baseURL+location
     # print(url)
-    response = requests.get(url)
-    jres = response.json()
-    comid = jres['features'][0]['properties']['comid']
-    return comid
+    try:
+        response = requests.get(url)
+        # print(f'this is the response: {response}')
+        response.raise_for_status()
+        jres = response.json()
+        comid = jres['features'][0]['properties']['comid']
+        return comid
+    except requests.exceptions.RequestException as err:
+        print("OOps: Something Else", err)
+    except requests.exceptions.HTTPError as errh:
+        print("Http Error:", errh)
+    except requests.exceptions.ConnectionError as errc:
+        print("Error Connecting:", errc)
+    except requests.exceptions.Timeout as errt:
+        print("Timeout Error:", errt)
+    except Exception as ex:
+        raise ex
