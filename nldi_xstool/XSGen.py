@@ -11,20 +11,27 @@ class XSGen:
         calculated cross-section perpendicular from sline.
     """
 
-    def __init__(self, point, cl_geom, ny, width) -> None:
+    def __init__(self, point, cl_geom, ny, width, tension=10.0) -> None:
 
         self.cl_geom = cl_geom
         self.point = point
-        self.tension = 0.5
+        self.tension = tension
         self.width = width
         self.cl_length = self.cl_geom.geometry[0].length
+        self.cl_npts = len(self.cl_geom.geometry[0].coords)
+        if (self.cl_length < 10.0):
+            self.nx = 10
+        else:
+            self.nx = int(self.cl_length/3)
+        if self.nx % 2 == 0:
+            self.nx += 1
         if ny % 2 == 0:
             ny += 1
         self.ny = ny
-        if self.cl_length > 20.0:
-            self.nx = int(self.cl_length / 10)
-        else:
-            self.nx = int(self.cl_length / 1)
+        # if self.cl_length > 20.0:
+        #     self.nx = int(self.cl_length / 10)
+        # else:
+        #     self.nx = int(self.cl_length / 1)
         self.cl = centerline(cl_geom, self.nx, self.tension)
         self.x = np.zeros(self.ny, dtype=np.double)
         self.y = np.zeros(self.ny, dtype=np.double)

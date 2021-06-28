@@ -1,12 +1,62 @@
 '''
-    File name: dem_query.py
+    File name: ancillary.py
     Author: Anders Hopkins, Richard McDonald
 '''
 
-
+import dataretrieval.nwis as nwis
 import requests
-# import json
 from shapely.geometry import Point, LineString, Polygon
+
+# The following function converts NGVD29 to NAVD88 if gage is in NGVD29 using NOAA NGS Vertcon service api
+# https://www.ngs.noaa.gov/web_services/ncat/lat-long-height-service.shtml
+
+
+def getGageDatum(gagenum, verbose=False):
+    si = nwis.get_record(sites=gagenum, service='site')
+    if si['alt_datum_cd'].values[0] == 'NGVD29':
+        # print('conversion')
+        url = "https://www.ngs.noaa.gov/api/ncat/llh"
+        lat_str = 'lat_va'
+        lon_str = 'long_va'
+
+        alt_str = 'alt_va'
+        indatum_str = 'coord_datum_cd'
+        outdatum_str = 'NAD83(2011)'
+        inVertDataum_str = 'NGVD29'
+        outVertDataum = 'NAVD88'
+        if f'{si[indatum_str].values[0]}' == 'NAD83':
+            indatum = 'NAD83(2011)'
+        else:
+            indatum = f'{si[indatum_str].values[0]}'
+
+        ohgt = float(si[alt_str].values[0])*.3048
+
+        tmplonstr = si[lon_str].values[0]
+
+        if len(str(tmplonstr)) == 6:
+            tstr = '0'
+            tmplonstr = (tstr + str(tmplonstr))
+
+        payload = {
+            'lat': f'N{si[lat_str].values[0]}',
+            'lon': f'W{tmplonstr}',
+            'orthoHt': repr(ohgt),
+            'inDatum': indatum,
+            'outDatum': outdatum_str,
+            'inVertDatum': inVertDataum_str,
+            'outVertDatum': outVertDataum
+        }
+        r = requests.get(url, params=payload)
+        resp = r.json()
+        if verbose:
+            print(f'{si[indatum_str].values[0]}')
+            print(f'payload: {payload}')
+            print(resp)
+        return float(resp['destOrthoht'])
+    else:
+        # print('non-conversion')
+        return si['alt_va'].values[0]*.3048
+
 
 # Resolution types and their respective IDs for the Rest Service
 res_types = {'res_1m': 18, 'res_3m': 19, 'res_5m': 20, 'res_10m': 21, 'res_30m': 22, 'res_60m': 23}
@@ -108,7 +158,7 @@ def get_dem(bbox, res_type):
 # The function to loop thru all resolutions and submit queries
 
 
-def query_dems(shape_type, coords, width=100):
+def queryDEMs(shape_type, coords, width=100):
     """
     Queries 3DEP 3DEPElevationIndex and returns of dictionary of available
     resolutions for shapes bounding box.
@@ -128,14 +178,9 @@ def query_dems(shape_type, coords, width=100):
     return(resp)
 
 
-def query_dems_shape(bbox):
+def queryDEMsShape(bbox):
     resp = {}
 
     for res_type in res_types:
         resp[res_type] = (get_dem(bbox, res_type))
     return resp
-
-# Tests #########
-# query_dems('point', [(-96, 39)])
-# query_dems('line', [(-96.0001, 39), (-96, 39)])
-# query_dems('polygon', [(-96.0008, 39), (-96, 39), ( -96, 39.0008)])
