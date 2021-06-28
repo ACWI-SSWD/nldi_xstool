@@ -123,7 +123,7 @@ def getXSAtPoint(point, numpoints, width, file=None, res=10):
         sys.exit(f'Error: {ex} unable to find comid - check lon lat coords')
     # print(f'comid = {comid}')
     strm_seg = NLDI().getfeature_byid("comid", comid).to_crs('epsg:3857')
-    xs = XSGen(point=gpd_pt, cl_geom=strm_seg, ny=numpoints, width=width)
+    xs = XSGen(point=gpd_pt, cl_geom=strm_seg, ny=numpoints, width=width, tension=10.0)
     xs_line = xs.get_xs()
     # print(comid, xs_line)
     # get topo polygon with buffer to ensure there is enough topography to interpolate xs line

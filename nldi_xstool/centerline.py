@@ -14,7 +14,7 @@ class centerline:
         self.gpdata = center_shp
         self.x = np.empty(0, dtype=np.double)
         self.y = np.empty(0, dtype=np.double)
-        self.tension = 0.5
+        self.tension = tension
         self.numclpts = 0
         self.numInterpPts = nx
         self.si = np.empty(0, dtype=np.double)
@@ -40,6 +40,7 @@ class centerline:
         self.x = np.array(tx)
         self.y = np.array(ty)
         self.numclpts = self.x.size
+        print(self.numclpts)
 
     # def description(self):
     #     return "{} used the shapfile {}".format("centerline", self.center_shp)

@@ -1,7 +1,7 @@
 import pytest
 
 from nldi_xstool.XSGen import XSGen
-from nldi_xstool.dem_query import query_dems_shape
+from nldi_xstool.ancillary import queryDEMsShape
 import py3dep
 from pynhd import NLDI
 # import xarray as xr
@@ -29,7 +29,7 @@ def test_get_gagexs(gage, gage_name, res, ny, width):
     t1 = (xs_line.total_bounds) + ((-100., -100., 100., 100.))
     xs_line_geom = xs_line.to_crs('epsg:4326')
     bbox = xs_line_geom.geometry[0].envelope.bounds
-    query = query_dems_shape(bbox)
+    query = queryDEMsShape(bbox)
     # print(query)
     query_text = json.dumps(query)
     print(query_text)
