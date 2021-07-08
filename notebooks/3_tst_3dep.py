@@ -1,5 +1,5 @@
 from nldi_xstool.XSGen import XSGen
-from nldi_xstool.dem_query import query_dems_shape
+from nldi_xstool.ancillary import queryDEMsShape
 import py3dep
 from pynhd import NLDI
 
@@ -18,7 +18,7 @@ xs_line_geom = xs_line.to_crs('epsg:4326')
 print(xs_line_geom)
 bbox = xs_line_geom.geometry[0].envelope.bounds
 print(bbox)
-query = query_dems_shape(bbox)
+query = queryDEMsShape(bbox)
 print(query)
 
 t1 = (xs_line.total_bounds) + ((-100., -100., 100., 100.))
