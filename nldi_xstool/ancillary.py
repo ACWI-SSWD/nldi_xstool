@@ -6,6 +6,19 @@
 import dataretrieval.nwis as nwis
 import requests
 from shapely.geometry import Point, LineString, Polygon
+from nldi_xstool.ExtADCPBathy import ExtADCPBathy
+
+
+def getExtBathyXS(file, dist, lonstr, latstr, estr, acrs):
+    exs = ExtADCPBathy(file=file,
+                       dist=dist,
+                       lonstr=lonstr,
+                       latstr=latstr,
+                       estr=estr,
+                       acrs=acrs)
+
+    return exs.get_xs_complete()
+
 
 # The following function converts NGVD29 to NAVD88 if gage is in NGVD29 using NOAA NGS Vertcon service api
 # https://www.ngs.noaa.gov/web_services/ncat/lat-long-height-service.shtml
