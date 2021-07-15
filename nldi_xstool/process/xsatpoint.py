@@ -124,7 +124,7 @@ class NLDIXSAtPointProcessor(BaseProcessor):
 
         outputs = [{"id": "nldi-xsatpoint-response", "value": results.__geo_interface__}]
         # print(results)
-        return mimetype, results.to_json()
+        return mimetype, results.__geo_interface__
 
     def __repr__(self):
         return "<NLDIXSAtPointProcessor> {}".format(self.nldi - xsatpoint - response)
