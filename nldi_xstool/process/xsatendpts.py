@@ -135,7 +135,7 @@ class NLDIXSAtEndPtsProcessor(BaseProcessor):
         totalTime = timeAfter - timeBefore
         print("Total Time:", totalTime)
 
-        outputs = [{"id": "nldi-xsatendpts-response", "value": results.to_json()}]
+        outputs = [{"id": "nldi-xsatendpts-response", "value": results.__geo_interface__}]
         # print(results)
         return mimetype, results.to_json()
 

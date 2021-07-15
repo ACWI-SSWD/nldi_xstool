@@ -122,7 +122,7 @@ class NLDIXSAtPointProcessor(BaseProcessor):
         totalTime = timeAfter - timeBefore
         print("Total Time:", totalTime)
 
-        outputs = [{"id": "nldi-xsatpoint-response", "value": results.to_json()}]
+        outputs = [{"id": "nldi-xsatpoint-response", "value": results.__geo_interface__}]
         # print(results)
         return mimetype, results.to_json()
 
